@@ -23,7 +23,7 @@ namespace ShipIt.Controllers
         }
 
         [HttpPost("")]
-        public void Post([FromBody] OutboundOrderRequestModel request)
+        public OutboundOrderResponse Post([FromBody] OutboundOrderRequestModel request)
         {
             Log.Info(String.Format("Processing outbound order: {0}", request));
 
@@ -43,8 +43,8 @@ namespace ShipIt.Controllers
             var lineItems = new List<StockAlteration>();
             var productIds = new List<int>();
             var errors = new List<string>();
-            var totalWeight = new float();
-            float totalTrucks = 1;
+            var totalWeight = 0.0f;
+            var totalTrucks = 0.0f;
 
             foreach (var orderLine in request.OrderLines)
             {
@@ -55,16 +55,13 @@ namespace ShipIt.Controllers
                 else
                 {
                     var product = products[orderLine.gtin]; 
-                    totalWeight += product.Weight;
+                    totalWeight += product.Weight * orderLine.quantity;
                     lineItems.Add(new StockAlteration(product.Id, orderLine.quantity));
                     productIds.Add(product.Id);
                 }
             }
 
-            if (totalWeight > 2000)
-            {
-                totalTrucks = totalWeight / 2000;
-            }
+            totalTrucks = totalWeight / 2000;
 
             if (errors.Count > 0)
             {
@@ -102,6 +99,11 @@ namespace ShipIt.Controllers
             }
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
+            return new OutboundOrderResponse
+            {
+                TotalTrucks = totalTrucks,
+                Success = true,
+            };
         }
     }
 }
