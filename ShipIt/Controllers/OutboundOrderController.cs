@@ -56,7 +56,6 @@ namespace ShipIt.Controllers
                 {
                     var product = products[orderLine.gtin]; 
                     totalWeight += product.Weight;
-                    Console.WriteLine(totalWeight);
                     lineItems.Add(new StockAlteration(product.Id, orderLine.quantity));
                     productIds.Add(product.Id);
                 }
