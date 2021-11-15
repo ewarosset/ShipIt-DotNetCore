@@ -43,6 +43,8 @@ namespace ShipIt.Controllers
             var lineItems = new List<StockAlteration>();
             var productIds = new List<int>();
             var errors = new List<string>();
+            var totalWeight = new float();
+            float totalTrucks = 1;
 
             foreach (var orderLine in request.OrderLines)
             {
@@ -52,10 +54,17 @@ namespace ShipIt.Controllers
                 }
                 else
                 {
-                    var product = products[orderLine.gtin];
+                    var product = products[orderLine.gtin]; 
+                    totalWeight += product.Weight;
+                    Console.WriteLine(totalWeight);
                     lineItems.Add(new StockAlteration(product.Id, orderLine.quantity));
                     productIds.Add(product.Id);
                 }
+            }
+
+            if (totalWeight > 2000)
+            {
+                totalTrucks = totalWeight / 2000;
             }
 
             if (errors.Count > 0)
