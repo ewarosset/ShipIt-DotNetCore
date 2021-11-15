@@ -6,17 +6,17 @@ namespace ShipIt.Repositories
     {
         public static string GetConnectionString()
         {
-            var dbname = ConfigurationManager.AppSettings["RDS_DB_NAME"];
+            var dbname = ConfigurationManager.AppSettings["ShipIt"];
 
             if (dbname == null)
             {
                 return System.Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
             };
 
-            var username = ConfigurationManager.AppSettings["RDS_USERNAME"];
-            var password = ConfigurationManager.AppSettings["RDS_PASSWORD"];
-            var hostname = ConfigurationManager.AppSettings["RDS_HOSTNAME"];
-            var port = ConfigurationManager.AppSettings["RDS_PORT"];
+            var username = ConfigurationManager.AppSettings["postgres"];
+            var password = ConfigurationManager.AppSettings["bookish"];
+            var hostname = ConfigurationManager.AppSettings["127.0.0.1"];
+            var port = ConfigurationManager.AppSettings["5432"];
 
             return "Server=" + hostname + ";Port=" + port + ";Database=" + dbname + ";User ID=" + username + ";Password=" + password + ";";
         }
