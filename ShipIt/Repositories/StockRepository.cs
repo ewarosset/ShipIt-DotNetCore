@@ -118,5 +118,33 @@ namespace ShipIt.Repositories
 
             base.RunTransaction(sql, parametersList);
         }
+
+        public IEnumerable<WarehouseStockDataModel> GetRelevantStockByWarehouseId(int id)
+        {
+            string sql = "SELECT s.p_id, s.w_id, " +
+                         "e.name, e.role, e.ext," +
+                         " gtin.gtin_cd, gtin.gtin_nm, " +
+                         "gcp.gln_nm, gcp.gln_addr_02, gcp.gln_addr_03, gcp.gln_addr_04, " +
+                         "gcp.gln_addr_postalcode, gcp.gln_addr_city, gcp.contact_tel" +
+                         "FROM stock s " +
+                         "JOIN em e ON e.w_id = s.w_id " +
+                         "JOIN gtin ON gtin.p_id = s.p_id " +
+                         "JOIN gcp ON gcp.gcp_cd = gtin.gcp_cd " +
+                         "WHERE s.w_id = @w_id " +
+                         "AND e.role = 'operations manager'";
+            
+            var parameter = new NpgsqlParameter("@w_id", id);
+
+            string noProductWithIdErrorMessage = string.Format("No stock found with w_id: {0}", id);
+            
+            try
+            {
+                return base.RunGetQuery(sql, reader => new WarehouseStockDataModel(reader), noProductWithIdErrorMessage, parameter).ToList();
+            }
+            catch (NoSuchEntityException)
+            {
+                return new List<WarehouseStockDataModel>();
+            }
+        }
     }
 }
