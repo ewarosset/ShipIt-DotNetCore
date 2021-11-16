@@ -22,7 +22,7 @@ namespace ShipIt.Controllers
         }
 
         [HttpGet("")]
-        public EmployeeResponse Get([FromQuery] string name)
+        public EmployeeResponse GetByName([FromQuery] string name)
         {
             Log.Info($"Looking up employee by name: {name}");
         
@@ -31,7 +31,18 @@ namespace ShipIt.Controllers
             Log.Info("Found employee: " + employee);
             return new EmployeeResponse(employee);
         }
-
+        
+        [HttpGet("id/{id}")]
+        public EmployeeResponse GetById([FromRoute] int id)
+        {
+            Log.Info($"Looking up employee by name: {id}");
+        
+            var employee = new Employee(_employeeRepository.GetEmployeeById(id));
+        
+            Log.Info("Found employee: " + employee);
+            return new EmployeeResponse(employee);
+        }
+        
         [HttpGet("{warehouseId}")]
         public EmployeeResponse Get([FromRoute] int warehouseId)
         {

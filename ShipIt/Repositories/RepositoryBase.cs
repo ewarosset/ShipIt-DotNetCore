@@ -6,8 +6,9 @@ using System.Dynamic;
 using System.Linq;
 using Npgsql;
 using ShipIt.Exceptions;
+ using ShipIt.Models.DataModels;
 
-namespace ShipIt.Repositories
+ namespace ShipIt.Repositories
 {
     public abstract class RepositoryBase
     {
