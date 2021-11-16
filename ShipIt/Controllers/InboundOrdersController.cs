@@ -33,9 +33,8 @@ namespace ShipIt.Controllers
             Log.Info("orderIn for warehouseId: " + warehouseId);
 
             var operationsManager = new Employee(_employeeRepository.GetOperationsManager(warehouseId));
-
             Log.Debug(String.Format("Found operations manager: {0}", operationsManager));
-
+            
             var allStock = _stockRepository.GetStockByWarehouseId(warehouseId);
 
             Dictionary<Company, List<InboundOrderLine>> orderlinesByCompany = new Dictionary<Company, List<InboundOrderLine>>();
@@ -68,7 +67,7 @@ namespace ShipIt.Controllers
             var orderSegments = orderlinesByCompany.Select(ol => new OrderSegment()
             {
                 OrderLines = ol.Value,
-                Company = ol.Key
+                Company = ol.Key,
             });
 
             Log.Info("Constructed inbound order");
