@@ -35,7 +35,7 @@ namespace ShipItTest
             onSetUp();
             var employeeBuilder = new EmployeeBuilder().setName(NAME);
             employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
-            var result = employeeController.Get(NAME);
+            var result = employeeController.GetByName(NAME);
 
             var correctEmployee = employeeBuilder.CreateEmployee();
             Assert.IsTrue(EmployeesAreEqual(correctEmployee, result.Employees.First()));
