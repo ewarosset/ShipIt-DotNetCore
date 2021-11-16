@@ -65,7 +65,7 @@ namespace ShipItTest
             onSetUp();
             try
             {
-                employeeController.Get(NAME);
+                employeeController.GetByName(NAME);
                 Assert.Fail("Expected exception to be thrown.");
             }
             catch (NoSuchEntityException e)
