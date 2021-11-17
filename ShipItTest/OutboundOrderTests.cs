@@ -68,7 +68,7 @@ namespace ShipItTest
         public void TestWeightIsWorking()
         {
             onSetUp();
-            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, 40) });
+            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, 10000) });
             var outboundOrder = new OutboundOrderRequestModel()
             {
                 WarehouseId = WAREHOUSE_ID,
@@ -77,14 +77,14 @@ namespace ShipItTest
                     new OrderLine()
                     {
                         gtin = GTIN,
-                        quantity = 20
+                        quantity = 10000
                     }
                 }
             };
 
             var outboundOrderResponse = outboundOrderController.Post(outboundOrder);
             
-            Assert.AreEqual(3.0f, outboundOrderResponse.TotalTrucks);
+            Assert.AreEqual(2.0f, outboundOrderResponse.TotalTrucks);
             
         }
 

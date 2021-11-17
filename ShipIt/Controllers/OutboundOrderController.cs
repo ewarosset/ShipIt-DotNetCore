@@ -5,6 +5,7 @@ using System.Linq;
  using ShipIt.Exceptions;
 using ShipIt.Models.ApiModels;
 using ShipIt.Repositories;
+using static ShipIt_DotNetCore.Services.OutboundServivces;
 
 namespace ShipIt.Controllers
 {
@@ -27,15 +28,7 @@ namespace ShipIt.Controllers
         {
             Log.Info(String.Format("Processing outbound order: {0}", request));
 
-            var gtins = new List<String>();
-            foreach (var orderLine in request.OrderLines)
-            {
-                if (gtins.Contains(orderLine.gtin))
-                {
-                    throw new ValidationException(String.Format("Outbound order request contains duplicate product gtin: {0}", orderLine.gtin));
-                }
-                gtins.Add(orderLine.gtin);
-            }
+            var gtins = AddUniqueGtin(request);
 
             var productDataModels = _productRepository.GetProductsByGtin(gtins);
             var products = productDataModels.ToDictionary(p => p.Gtin, p => new Product(p));
@@ -43,8 +36,6 @@ namespace ShipIt.Controllers
             var lineItems = new List<StockAlteration>();
             var productIds = new List<int>();
             var errors = new List<string>();
-            var totalWeight = 0.0f;
-            var totalTrucks = 0.0f;
 
             foreach (var orderLine in request.OrderLines)
             {
@@ -54,15 +45,12 @@ namespace ShipIt.Controllers
                 }
                 else
                 {
-                    var product = products[orderLine.gtin]; 
-                    totalWeight += product.Weight * orderLine.quantity;
+                    var product = products[orderLine.gtin];
                     lineItems.Add(new StockAlteration(product.Id, orderLine.quantity));
                     productIds.Add(product.Id);
                 }
             }
-
-            totalTrucks = totalWeight / 2000;
-
+            
             if (errors.Count > 0)
             {
                 throw new NoSuchEntityException(string.Join("; ", errors));
@@ -99,9 +87,12 @@ namespace ShipIt.Controllers
             }
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
+            
+            var trucksNeeded = CalculateTrucksNeeded(orderLines, products);
+            
             return new OutboundOrderResponse
             {
-                TotalTrucks = totalTrucks,
+                TotalTrucks = trucksNeeded,
                 Success = true,
             };
         }

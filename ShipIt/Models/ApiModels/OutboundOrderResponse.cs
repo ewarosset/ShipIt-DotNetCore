@@ -4,4 +4,5 @@
     {
         public float TotalTrucks { get; set; }
     }
+    
 }

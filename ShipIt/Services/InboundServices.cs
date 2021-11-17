@@ -19,7 +19,7 @@ namespace ShipIt_DotNetCore.Services
                     var orderQuantity = Math.Max(product.LowerThreshold * 3 - product.Held, product.MinimumOrderQuantity);
 
                     Company company = new Company();
-                    company.Gcp = product.Gcp;
+                    company.Gcp = product.Gcp; 
                     company.Addr2 = product.Addr2;
                     company.Addr3 = product.Addr3;
                     company.Addr4 = product.Addr4;
