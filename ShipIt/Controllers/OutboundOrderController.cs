@@ -88,7 +88,7 @@ namespace ShipIt.Controllers
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
             
-            var trucksNeeded = CalculateTrucksNeeded(orderLines, products);
+            var trucksNeeded = CalculateTrucksRequired(orderLines, products);
             
             return new OutboundOrderResponse
             {
