@@ -4,7 +4,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ShipIt.Exceptions;
 using ShipIt.Models.ApiModels;
-using ShipIt.Repositories;
+ using ShipIt.Models.DataModels;
+ using ShipIt.Repositories;
 
 namespace ShipIt.Controllers
 {
@@ -26,10 +27,10 @@ namespace ShipIt.Controllers
         {
             Log.Info($"Looking up employee by name: {name}");
         
-            var employee = new Employee(_employeeRepository.GetEmployeeByName(name));
+            var employees = _employeeRepository.GetEmployeesByName(name).Select(employeeDataModel => new Employee(employeeDataModel));
 
-            Log.Info("Found employee: " + employee);
-            return new EmployeeResponse(employee);
+            Log.Info("Found employee(s): " + employees);
+            return new EmployeeResponse(employees);
         }
         
         [HttpGet("id/{id}")]
