@@ -150,26 +150,22 @@ namespace ShipItTest
             }
         }
 
-        // [Test]
-        // public void TestAddDuplicateEmployee()
-        // {
-        //     onSetUp();
-        //     var employeeBuilder = new EmployeeBuilder().setName(NAME);
-        //     employeeRepository.AddEmployees(new List<Employee>() { employeeBuilder.CreateEmployee() });
-        //     var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
-        //
-        //     try
-        //     {
-        //         employeeController.Post(addEmployeesRequest);
-        //         Assert.Fail("Expected exception to be thrown.");
-        //     }
-        //     catch (Exception)
-        //     {
-        //         Assert.IsTrue(true);
-        //     }
-        // }
-        //
-        //
+        [Test]
+        public void TestDuplicateEmployeeHaveDifferentIDs()
+        {
+            onSetUp();
+            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
+        
+            var response = employeeController.Post(addEmployeesRequest);
+            var databaseEmployee = employeeRepository.GetEmployeesByName(NAME).First();
+            var correctDatabaseEmployee = employeeBuilder.CreateEmployee();
+        
+            Assert.IsTrue(response.Success);
+            Assert.AreNotEqual(new Employee(databaseEmployee), correctDatabaseEmployee);
+        }
+        
+        
         private bool EmployeesAreEqual(Employee A, Employee B)
         {
             return A.WarehouseId == B.WarehouseId
