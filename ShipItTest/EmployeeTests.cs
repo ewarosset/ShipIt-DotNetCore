@@ -135,6 +135,8 @@ namespace ShipItTest
         public void TestDeleteNonexistentEmployee()
         {
             onSetUp();
+            
+            // TODO Issue with removing by a none existing ID (currently set to a high number)
             var removeEmployeeRequest = new RemoveEmployeeRequest() { Id = ID };
         
             try
