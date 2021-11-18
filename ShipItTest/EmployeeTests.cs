@@ -16,9 +16,10 @@ namespace ShipItTest
         EmployeeController employeeController = new EmployeeController(new EmployeeRepository());
         EmployeeRepository employeeRepository = new EmployeeRepository();
 
-        private const string NAME = "Ewa Rosset";
-        private const int WAREHOUSE_ID = 1;
-        private const int ID = 1000000;
+        private const string Name = "Ewa Rosset";
+        private const string MissingName = "Ewa Rosset";
+        private const int WarehouseId = 1;
+        private const int EmployeeId = 1000000;
         
 
 
@@ -97,11 +98,11 @@ namespace ShipItTest
         public void TestAddEmployees()
         {
             onSetUp();
-            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var employeeBuilder = new EmployeeBuilder().setName(Name);
             var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
         
             var response = employeeController.Post(addEmployeesRequest);
-            var databaseEmployee = employeeRepository.GetEmployeesByName(NAME).First();
+            var databaseEmployee = employeeRepository.GetEmployeesByName(Name).First();
             var correctDatabaseEmployee = employeeBuilder.CreateEmployee();
         
             Assert.IsTrue(response.Success);
@@ -113,9 +114,9 @@ namespace ShipItTest
         public void TestDeleteEmployees()
         {
             onSetUp();
-            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var employeeBuilder = new EmployeeBuilder().setName(Name);
             employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
-            var employee = employeeRepository.GetEmployeesByName(NAME).First();
+            var employee = employeeRepository.GetEmployeesByName(Name).First();
             
             var removeEmployeeRequest = new RemoveEmployeeRequest() {Id = employee.Id};
             employeeController.Delete(removeEmployeeRequest);
@@ -137,7 +138,7 @@ namespace ShipItTest
             onSetUp();
             
             // TODO Issue with removing by a none existing ID (currently set to a high number)
-            var removeEmployeeRequest = new RemoveEmployeeRequest() { Id = ID };
+            var removeEmployeeRequest = new RemoveEmployeeRequest() { Id = EmployeeId };
         
             try
             {
@@ -146,7 +147,7 @@ namespace ShipItTest
             }
             catch (NoSuchEntityException e)
             {
-                Assert.IsTrue(e.Message.Contains(ID.ToString()));
+                Assert.IsTrue(e.Message.Contains(EmployeeId.ToString()));
             }
         }
 
@@ -154,11 +155,11 @@ namespace ShipItTest
         public void TestDuplicateEmployeeHaveDifferentIDs()
         {
             onSetUp();
-            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var employeeBuilder = new EmployeeBuilder().setName(Name);
             var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
         
             var response = employeeController.Post(addEmployeesRequest);
-            var databaseEmployee = employeeRepository.GetEmployeesByName(NAME).First();
+            var databaseEmployee = employeeRepository.GetEmployeesByName(Name).First();
             var correctDatabaseEmployee = employeeBuilder.CreateEmployee();
         
             Assert.IsTrue(response.Success);
