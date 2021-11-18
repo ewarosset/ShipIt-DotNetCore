@@ -18,6 +18,7 @@ namespace ShipItTest
 
         private const string NAME = "Ewa Rosset";
         private const int WAREHOUSE_ID = 1;
+        private const int ID = 1000000;
         
 
 
@@ -130,22 +131,22 @@ namespace ShipItTest
             }
         }
 
-        // [Test]
-        // public void TestDeleteNonexistentEmployee()
-        // {
-        //     onSetUp();
-        //     var removeEmployeeRequest = new RemoveEmployeeRequest() { Name = NAME };
-        //
-        //     try
-        //     {
-        //         employeeController.Delete(removeEmployeeRequest);
-        //         Assert.Fail("Expected exception to be thrown.");
-        //     }
-        //     catch (NoSuchEntityException e)
-        //     {
-        //         Assert.IsTrue(e.Message.Contains(NAME));
-        //     }
-        // }
+        [Test]
+        public void TestDeleteNonexistentEmployee()
+        {
+            onSetUp();
+            var removeEmployeeRequest = new RemoveEmployeeRequest() { Id = ID };
+        
+            try
+            {
+                employeeController.Delete(removeEmployeeRequest);
+                Assert.Fail("Expected exception to be thrown.");
+            }
+            catch (NoSuchEntityException e)
+            {
+                Assert.IsTrue(e.Message.Contains(ID.ToString()));
+            }
+        }
 
         // [Test]
         // public void TestAddDuplicateEmployee()
