@@ -80,19 +80,21 @@ namespace ShipIt.Controllers
         [HttpDelete("")]
         public void Delete([FromBody] RemoveEmployeeRequest requestModel)
         {
-            string name = requestModel.Name;
-            if (name == null)
+            // string name = requestModel.Name;
+            int id = requestModel.Id;
+            
+            if (id == null)
             {
                 throw new MalformedRequestException("Unable to parse name from request parameters");
             }
 
             try
             {
-                _employeeRepository.RemoveEmployee(name);
+                _employeeRepository.RemoveEmployee(id);
             }
             catch (NoSuchEntityException)
             {
-                throw new NoSuchEntityException("No employee exists with name: " + name);
+                throw new NoSuchEntityException("No employee exists with id: " + id);
             }
         }
     }
