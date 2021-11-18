@@ -13,7 +13,7 @@ namespace ShipItTest.Builders
         private int WarehouseId = 1;
         private EmployeeRole Role = EmployeeRole.OPERATIONS_MANAGER;
         private String Ext = "73996";
-        // private int id = 1492;
+        
 
         public EmployeeBuilder setName(String name)
         {

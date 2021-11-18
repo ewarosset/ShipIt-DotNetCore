@@ -18,7 +18,7 @@ namespace ShipItTest
 
         private const string NAME = "Ewa Rosset";
         private const int WAREHOUSE_ID = 1;
-        // private const int ID = 1492;
+        
 
 
         // [Test]
@@ -92,28 +92,28 @@ namespace ShipItTest
         //     }
         // }
         //
-        // // [Test]
-        // // public void TestAddEmployees()
-        // // {
-        // //     onSetUp();
-        // //     var employeeBuilder = new EmployeeBuilder().setName(NAME);
-        // //     var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
-        // //
-        // //     var response = employeeController.Post(addEmployeesRequest);
-        // //     var databaseEmployee = employeeRepository.GetEmployeesByName(NAME).First();
-        // //     var correctDatabaseEmployee = employeeBuilder.CreateEmployee();
-        // //
-        // //     Assert.IsTrue(response.Success);
-        // //     Assert.IsTrue(EmployeesAreEqual(new Employee(databaseEmployee), correctDatabaseEmployee));
-        // // }
-        //
+        [Test]
+        public void TestAddEmployees()
+        {
+            onSetUp();
+            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
+        
+            var response = employeeController.Post(addEmployeesRequest);
+            var databaseEmployee = employeeRepository.GetEmployeesByName(NAME).First();
+            var correctDatabaseEmployee = employeeBuilder.CreateEmployee();
+        
+            Assert.IsTrue(response.Success);
+            Assert.IsTrue(EmployeesAreEqual(new Employee(databaseEmployee), correctDatabaseEmployee));
+            
+        }
+        
         [Test]
         public void TestDeleteEmployees()
         {
             onSetUp();
-            // var employeeBuilder = new EmployeeBuilder().setName(NAME);
-            var employeeOne = new EmployeeBuilder().setName(NAME);
-            employeeRepository.AddEmployees(new List<Employee>() {employeeOne.CreateEmployee()});
+            var employeeBuilder = new EmployeeBuilder().setName(NAME);
+            employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
             var employee = employeeRepository.GetEmployeesByName(NAME).First();
             
             var removeEmployeeRequest = new RemoveEmployeeRequest() {Id = employee.Id};
@@ -167,12 +167,12 @@ namespace ShipItTest
         // }
         //
         //
-        // private bool EmployeesAreEqual(Employee A, Employee B)
-        // {
-        //     return A.WarehouseId == B.WarehouseId
-        //            && A.Name == B.Name
-        //            && A.role == B.role
-        //            && A.ext == B.ext;
-        // }
+        private bool EmployeesAreEqual(Employee A, Employee B)
+        {
+            return A.WarehouseId == B.WarehouseId
+                   && A.Name == B.Name
+                   && A.role == B.role
+                   && A.ext == B.ext;
+        }
     }
 }
