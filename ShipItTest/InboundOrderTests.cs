@@ -1,7 +1,8 @@
 ﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+ using System.Security.Cryptography.Xml;
+ using NUnit.Framework;
 using ShipIt.Controllers;
 using ShipIt.Exceptions;
 using ShipIt.Models.ApiModels;
@@ -48,8 +49,10 @@ namespace ShipItTest
         public void TestCreateOrderNoProductsHeld()
         {
             onSetUp();
+            
+            var employeeId = employeeRepository.GetEmployeesByWarehouseId(WAREHOUSE_ID).First().Id;
 
-            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID);
+            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID, employeeId);
 
             Assert.AreEqual(inboundOrder.WarehouseId, WAREHOUSE_ID);
             Assert.IsTrue(EmployeesAreEqual(inboundOrder.OperationsManager, OPS_MANAGER));
@@ -61,8 +64,10 @@ namespace ShipItTest
         {
             onSetUp();
             stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, 0) });
+            
+            var employeeId = employeeRepository.GetEmployeesByWarehouseId(WAREHOUSE_ID).First().Id;
 
-            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID);
+            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID, employeeId);
 
             Assert.AreEqual(inboundOrder.OrderSegments.Count(), 1);
             var orderSegment = inboundOrder.OrderSegments.First();
@@ -75,7 +80,9 @@ namespace ShipItTest
             onSetUp();
             stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, product.LowerThreshold) });
 
-            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID);
+            var employeeId = employeeRepository.GetEmployeesByWarehouseId(WAREHOUSE_ID).First().Id;
+
+            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID, employeeId);
 
             Assert.AreEqual(inboundOrder.OrderSegments.Count(), 0);
         }
@@ -86,8 +93,10 @@ namespace ShipItTest
             onSetUp();
             stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() { new StockAlteration(productId, product.LowerThreshold - 1) });
             productRepository.DiscontinueProductByGtin(GTIN);
+            
+            var employeeId = employeeRepository.GetEmployeesByWarehouseId(WAREHOUSE_ID).First().Id;
 
-            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID);
+            var inboundOrder = inboundOrderController.Get(WAREHOUSE_ID, employeeId);
 
             Assert.AreEqual(inboundOrder.OrderSegments.Count(), 0);
         }
