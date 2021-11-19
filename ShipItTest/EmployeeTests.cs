@@ -47,23 +47,23 @@ namespace ShipItTest
         //     Assert.IsTrue(result.Success);
         // }
         //
-        // [Test]
-        // public void TestGetEmployeesByWarehouseId()
-        // {
-        //     onSetUp();
-        //     var employeeBuilderA = new EmployeeBuilder().setWarehouseId(WAREHOUSE_ID).setName("A");
-        //     var employeeBuilderB = new EmployeeBuilder().setWarehouseId(WAREHOUSE_ID).setName("B");
-        //     employeeRepository.AddEmployees(new List<Employee>() { employeeBuilderA.CreateEmployee(), employeeBuilderB.CreateEmployee() });
-        //     var result = employeeController.Get(WAREHOUSE_ID).Employees.ToList();
-        //
-        //     var correctEmployeeA = employeeBuilderA.CreateEmployee();
-        //     var correctEmployeeB = employeeBuilderB.CreateEmployee();
-        //
-        //     Assert.IsTrue(result.Count == 2);
-        //     Assert.IsTrue(EmployeesAreEqual(correctEmployeeA, result.First()));
-        //     Assert.IsTrue(EmployeesAreEqual(correctEmployeeB, result.Last()));
-        // }
-        //
+        [Test]
+        public void TestGetEmployeesByWarehouseId()
+        {
+            onSetUp();
+            var employeeBuilderA = new EmployeeBuilder().setWarehouseId(WarehouseId).setName("A");
+            var employeeBuilderB = new EmployeeBuilder().setWarehouseId(WarehouseId).setName("B");
+            employeeRepository.AddEmployees(new List<Employee>() { employeeBuilderA.CreateEmployee(), employeeBuilderB.CreateEmployee() });
+            var result = employeeController.Get(WarehouseId).Employees.ToList();
+        
+            var correctEmployeeA = employeeBuilderA.CreateEmployee();
+            var correctEmployeeB = employeeBuilderB.CreateEmployee();
+        
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(EmployeesAreEqual(correctEmployeeA, result.First()));
+            Assert.IsTrue(EmployeesAreEqual(correctEmployeeB, result.Last()));
+        }
+        
         [Test]
         public void TestGetNonExistentEmployee()
         {
