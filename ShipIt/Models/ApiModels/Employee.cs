@@ -14,7 +14,7 @@ namespace ShipIt.Models.ApiModels
         public int WarehouseId { get; set; }
         public EmployeeRole role { get; set; }
         public string ext { get; set; }
-        // public int Id { get; set; }
+        
 
         public Employee(EmployeeDataModel dataModel)
         {
@@ -22,7 +22,7 @@ namespace ShipIt.Models.ApiModels
             WarehouseId = dataModel.WarehouseId;
             role = MapDatabaseRoleToApiRole(dataModel.Role);
             ext = dataModel.Ext;
-            // id = dataModel.Id;
+            id = dataModel.Id;
         }
 
         private EmployeeRole MapDatabaseRoleToApiRole(string databaseRole)
