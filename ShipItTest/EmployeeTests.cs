@@ -17,7 +17,7 @@ namespace ShipItTest
         EmployeeRepository employeeRepository = new EmployeeRepository();
 
         private const string Name = "Ewa Rosset";
-        private const string MissingName = "Ewa Rosset";
+        private const string MissingName = "Missing Name";
         private const int WarehouseId = 1;
         private const int EmployeeId = 1000000;
         
@@ -64,21 +64,22 @@ namespace ShipItTest
         //     Assert.IsTrue(EmployeesAreEqual(correctEmployeeB, result.Last()));
         // }
         //
-        // [Test]
-        // public void TestGetNonExistentEmployee()
-        // {
-        //     onSetUp();
-        //     try
-        //     {
-        //         employeeController.GetByName(NAME);
-        //         Assert.Fail("Expected exception to be thrown.");
-        //     }
-        //     catch (NoSuchEntityException e)
-        //     {
-        //         Assert.IsTrue(e.Message.Contains(NAME));
-        //     }
-        // }
-        //
+        [Test]
+        public void TestGetNonExistentEmployee()
+        {
+            onSetUp();
+
+            try
+            {
+                employeeController.GetByName(MissingName).Employees.ToList();
+                Assert.Fail("Expected exception to be thrown.");
+            }
+            catch (NoSuchEntityException e)
+            {
+                Assert.IsTrue(e.Message.Contains(MissingName));
+            }
+        }
+        
         // [Test]
         // public void TestGetEmployeeInNonexistentWarehouse()
         // {
