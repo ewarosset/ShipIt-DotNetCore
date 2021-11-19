@@ -19,9 +19,6 @@ namespace ShipItTest
         private const string Name = "Ewa Rosset";
         private const string MissingName = "Missing Name";
         private const int WarehouseId = 1;
-        private const int EmployeeId = 1000000;
-        
-
 
         [Test]
         public void TestRoundtripEmployeeRepository()
@@ -139,7 +136,11 @@ namespace ShipItTest
             onSetUp();
             
             // TODO Issue with removing by a none existing ID (currently set to a high number)
-            var removeEmployeeRequest = new RemoveEmployeeRequest() { Id = EmployeeId };
+            var employeeBuilder = new EmployeeBuilder().setName(Name);
+            var addEmployeesRequest = employeeBuilder.CreateAddEmployeesRequest();
+            var employeeId = employeeBuilder.CreateEmployee().id;
+
+            var removeEmployeeRequest = new RemoveEmployeeRequest() { Id = employeeId };
         
             try
             {
@@ -148,7 +149,7 @@ namespace ShipItTest
             }
             catch (NoSuchEntityException e)
             {
-                Assert.IsTrue(e.Message.Contains(EmployeeId.ToString()));
+                Assert.IsTrue(e.Message.Contains(employeeId.ToString()));
             }
         }
 
