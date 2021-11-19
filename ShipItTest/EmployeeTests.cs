@@ -34,19 +34,19 @@ namespace ShipItTest
         //     Assert.AreEqual(employeeRepository.GetEmployeeById(employee.Id).WarehouseId, employee.WarehouseId);
         // }
         //
-        // [Test]
-        // public void TestGetEmployeeByName()
-        // {
-        //     onSetUp();
-        //     var employeeBuilder = new EmployeeBuilder().setName(NAME);
-        //     employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
-        //     var result = employeeController.GetByName(NAME);
-        //
-        //     var correctEmployee = employeeBuilder.CreateEmployee();
-        //     Assert.IsTrue(EmployeesAreEqual(correctEmployee, result.Employees.First()));
-        //     Assert.IsTrue(result.Success);
-        // }
-        //
+        [Test]
+        public void TestGetEmployeeByName()
+        {
+            onSetUp();
+            var employeeBuilder = new EmployeeBuilder().setName(Name);
+            employeeRepository.AddEmployees(new List<Employee>() {employeeBuilder.CreateEmployee()});
+            var result = employeeController.GetByName(Name);
+        
+            var correctEmployee = employeeBuilder.CreateEmployee();
+            Assert.IsTrue(EmployeesAreEqual(correctEmployee, result.Employees.First()));
+            Assert.IsTrue(result.Success);
+        }
+        
         [Test]
         public void TestGetEmployeesByWarehouseId()
         {
