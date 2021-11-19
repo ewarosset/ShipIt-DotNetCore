@@ -29,14 +29,14 @@ namespace ShipIt.Controllers
             Log.Info(String.Format("Processing outbound order: {0}", request));
 
             var gtins = AddUniqueGtin(request);
-
+            
             var productDataModels = _productRepository.GetProductsByGtin(gtins);
             var products = productDataModels.ToDictionary(p => p.Gtin, p => new Product(p));
-
+            
             var lineItems = new List<StockAlteration>();
             var productIds = new List<int>();
             var errors = new List<string>();
-
+            
             foreach (var orderLine in request.OrderLines)
             {
                 if (!products.ContainsKey(orderLine.gtin))
@@ -57,34 +57,9 @@ namespace ShipIt.Controllers
             }
 
             var stock = _stockRepository.GetStockByWarehouseAndProductIds(request.WarehouseId, productIds);
-
             var orderLines = request.OrderLines.ToList();
-            errors = new List<string>();
 
-            for (int i = 0; i < lineItems.Count; i++)
-            {
-                var lineItem = lineItems[i];
-                var orderLine = orderLines[i];
-
-                if (!stock.ContainsKey(lineItem.ProductId))
-                {
-                    errors.Add(string.Format("Product: {0}, no stock held", orderLine.gtin));
-                    continue;
-                }
-
-                var item = stock[lineItem.ProductId];
-                if (lineItem.Quantity > item.held)
-                {
-                    errors.Add(
-                        string.Format("Product: {0}, stock held: {1}, stock to remove: {2}", orderLine.gtin, item.held,
-                            lineItem.Quantity));
-                }
-            }
-
-            if (errors.Count > 0)
-            {
-                throw new InsufficientStockException(string.Join("; ", errors));
-            }
+            CheckForInsufficientStock(request, stock, lineItems);
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
             
