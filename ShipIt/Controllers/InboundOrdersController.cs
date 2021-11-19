@@ -29,11 +29,11 @@ using ShipIt.Repositories;
         }
 
         [HttpGet("{warehouseId}")]
-        public InboundOrderResponse Get([FromRoute] int warehouseId)
+        public InboundOrderResponse Get([FromRoute] int warehouseId, int employeeId)
         {
             Log.Info("orderIn for warehouseId: " + warehouseId);
 
-            var operationsManager = new Employee(_employeeRepository.GetOperationsManager(warehouseId));
+            var operationsManager = new Employee(_employeeRepository.GetOperationsManager(warehouseId, employeeId));
 
             Log.Debug(String.Format("Found operations manager: {0}", operationsManager));
 
