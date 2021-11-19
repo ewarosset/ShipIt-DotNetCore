@@ -16,7 +16,7 @@ namespace ShipIt.Repositories
         int GetWarehouseCount();
         IEnumerable<EmployeeDataModel> GetEmployeesByName(string name);
         IEnumerable<EmployeeDataModel> GetEmployeesByWarehouseId(int warehouseId);
-        EmployeeDataModel GetOperationsManager(int warehouseId);
+        EmployeeDataModel GetOperationsManager(int warehouseId, int employeeId);
         void AddEmployees(IEnumerable<Employee> employees);
         void RemoveEmployee(int id);
         EmployeeDataModel GetEmployeeById(int id);
