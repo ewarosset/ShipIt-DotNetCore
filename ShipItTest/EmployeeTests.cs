@@ -23,17 +23,17 @@ namespace ShipItTest
         
 
 
-        // [Test]
-        // public void TestRoundtripEmployeeRepository()
-        // {
-        //     onSetUp();
-        //     var employee = new EmployeeBuilder().CreateEmployee();
-        //     employeeRepository.AddEmployees(new List<Employee>() {employee});
-        //     Assert.AreEqual(employeeRepository.GetEmployeeById(employee.Id).Name, employee.Name);
-        //     Assert.AreEqual(employeeRepository.GetEmployeeById(employee.Id).Ext, employee.ext);
-        //     Assert.AreEqual(employeeRepository.GetEmployeeById(employee.Id).WarehouseId, employee.WarehouseId);
-        // }
-        //
+        [Test]
+        public void TestRoundtripEmployeeRepository()
+        {
+            onSetUp();
+            var employee = new EmployeeBuilder().CreateEmployee();
+            employeeRepository.AddEmployees(new List<Employee>() {employee});
+            Assert.AreEqual(employeeRepository.GetEmployeesByName(employee.Name).First().Name, employee.Name);
+            Assert.AreEqual(employeeRepository.GetEmployeesByName(employee.Name).First().Ext, employee.ext);
+            Assert.AreEqual(employeeRepository.GetEmployeesByName(employee.Name).First().WarehouseId, employee.WarehouseId);
+        }
+        
         [Test]
         public void TestGetEmployeeByName()
         {
@@ -80,21 +80,21 @@ namespace ShipItTest
             }
         }
         
-        // [Test]
-        // public void TestGetEmployeeInNonexistentWarehouse()
-        // {
-        //     onSetUp();
-        //     try
-        //     {
-        //         var employees = employeeController.Get(WAREHOUSE_ID).Employees.ToList();
-        //         Assert.Fail("Expected exception to be thrown.");
-        //     }
-        //     catch (NoSuchEntityException e)
-        //     {
-        //         Assert.IsTrue(e.Message.Contains(WAREHOUSE_ID.ToString()));
-        //     }
-        // }
-        //
+        [Test]
+        public void TestGetEmployeeInNonexistentWarehouse()
+        {
+            onSetUp();
+            try
+            {
+                var employees = employeeController.Get(WarehouseId).Employees.ToList();
+                Assert.Fail("Expected exception to be thrown.");
+            }
+            catch (NoSuchEntityException e)
+            {
+                Assert.IsTrue(e.Message.Contains(WarehouseId.ToString()));
+            }
+        }
+        
         [Test]
         public void TestAddEmployees()
         {

@@ -30,7 +30,7 @@ namespace ShipIt.Models.DataModels
             this.WarehouseId = employee.WarehouseId;
             this.Role = MapApiRoleToDatabaseRole(employee.role);
             this.Ext = employee.ext;
-            this.Id = employee.Id;
+            this.Id = employee.id;
         }
 
         private string MapApiRoleToDatabaseRole(EmployeeRole employeeRole)
