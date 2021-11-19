@@ -101,13 +101,14 @@ namespace ShipIt.Repositories
             return base.RunGetQuery(sql, reader => new EmployeeDataModel(reader), noProductWithIdErrorMessage, parameter);
         }
 
-        public EmployeeDataModel GetOperationsManager(int warehouseId)
+        public EmployeeDataModel GetOperationsManager(int warehouseId, int employeeId)
         {
 
-            string sql = "SELECT name, w_id, role, ext FROM em WHERE w_id = @w_id AND role = @role";
+            string sql = "SELECT name, w_id, role, ext, id FROM em WHERE w_id = @w_id AND role = @role AND id = @id";
             var parameters = new []
             {
                 new NpgsqlParameter("@w_id", warehouseId),
+                new NpgsqlParameter("@id", employeeId),
                 new NpgsqlParameter("@role", DataBaseRoles.OperationsManager)
             };
 
